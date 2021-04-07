@@ -270,7 +270,7 @@ class BTree<T> implements ITree {
 
     if (nodeToDelete === null) return;
     if (nodeToDelete.right === null && nodeToDelete.left === null) {
-      if (nodeToDelete.parent.right.equal(nodeToDelete)) {
+      if (nodeToDelete.parent.right?.equal(nodeToDelete)) {
         nodeToDelete.parent.right = null;
       } else {
         nodeToDelete.parent.left = null;
@@ -283,11 +283,8 @@ class BTree<T> implements ITree {
       }
       nodeToExchange.parent.right = nodeToExchange.right;
     } else if (nodeToDelete.right !== null) {
-      if (nodeToDelete.parent.right.equal(nodeToDelete)) {
         nodeToDelete.parent.right = nodeToDelete.right;
-      } else {
-        nodeToDelete.parent.left = nodeToDelete.right;
-      }
+      nodeToDelete.right.parent = nodeToDelete.parent;
     }
   }
 
@@ -315,6 +312,14 @@ class BTree<T> implements ITree {
     }
 
     return this.findMax(currentNode.right);
+  }
+
+  protected findMin(currentNode: INode): INode {
+    if (currentNode.left === null) {
+      return currentNode;
+    }
+
+    return this.findMin(currentNode.left);
   }
 
   public show(): void {
