@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "preserveConstEnums": true,
+    "sourceMap": true,
+    "target": "ES5",
+    "lib": ["ES2015", "DOM", "ES2017"]
+  },
+  "files": ["tree.ts"]
+}
