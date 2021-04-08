@@ -93,12 +93,13 @@ class BNode<T> extends INode {
   }
 }
 
+};
 class RBNode<T> extends INode {
   protected _parent: RBNode<T>;
   protected _right: RBNode<T>;
   protected _left: RBNode<T>;
   protected _data: T;
-  protected _color: boolean;
+  protected _color: Color;
 
   constructor(data: T = null) {
     super();
@@ -106,7 +107,7 @@ class RBNode<T> extends INode {
     this._right = null;
     this._left = null;
     this._data = data;
-    this._color = true;
+    this._color = COLORS.red;
   }
 
   public get parent(): RBNode<T> {
@@ -140,12 +141,12 @@ class RBNode<T> extends INode {
   public get color() {
     return this._color;
   }
-  public set color(color: boolean) {
+  public set color(color: Color) {
     this._color = color;
   }
 
   colorFlip() {
-    this._color = !this._color;
+    this._color = this._color === COLORS.red ? COLORS.black : COLORS.red;
   }
 
   clone(): RBNode<T> {
@@ -469,7 +470,7 @@ class RBTree<T> extends BTree<T> {
   public add(node: RBNode<T>): void {
     if (this.root === null) {
       this.root = node;
-      this.root.color = false;
+      this.root.color = COLORS.black;
       return;
     }
 
@@ -489,7 +490,7 @@ class RBTree<T> extends BTree<T> {
 
   protected balanceSubTree(node: RBNode<T>): void {
     if (node.equal(this.root)) {
-      this.root.color = false;
+      this.root.color = COLORS.black;
       return;
     }
 
@@ -497,7 +498,7 @@ class RBTree<T> extends BTree<T> {
       if (node.parent.parent.left?.equal(node.parent)) {
         if (
           node.parent.parent.right !== null &&
-          node.parent.parent.right.color === true
+          node.parent.parent.right.color === COLORS.red
         ) {
           this.recolor(node);
         } else {
@@ -506,7 +507,7 @@ class RBTree<T> extends BTree<T> {
       } else {
         if (
           node.parent.parent.left !== null &&
-          node.parent.parent.left.color === true
+          node.parent.parent.left.color === COLORS.red
         ) {
           this.recolor(node);
         } else {
@@ -519,15 +520,15 @@ class RBTree<T> extends BTree<T> {
   protected recolor(node: RBNode<T>): void {
     if (node.parent.parent?.left.equal(node.parent)) {
       if (node.parent.parent.right !== null) {
-        node.parent.parent.right.color = false;
+        node.parent.parent.right.color = COLORS.black;
       }
     } else {
       if (node.parent.parent.left !== null) {
-        node.parent.parent.left.color = false;
+        node.parent.parent.left.color = COLORS.black;
       }
     }
-    node.parent.color = false;
-    node.parent.parent.color = true;
+    node.parent.color = COLORS.black;
+    node.parent.parent.color = COLORS.red;
   }
 
   protected rotateSubtree(node: RBNode<T>): void {
