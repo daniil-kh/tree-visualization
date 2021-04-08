@@ -93,7 +93,20 @@ class BNode<T> extends INode {
   }
 }
 
+type Color = "RED" | "BLACK" | "DOUBLE BLACK";
+
+type ColorsConstant = {
+  red: Color;
+  black: Color;
+  double_black: Color;
 };
+
+const COLORS: ColorsConstant = {
+  red: "RED",
+  black: "BLACK",
+  double_black: "DOUBLE BLACK",
+};
+
 class RBNode<T> extends INode {
   protected _parent: RBNode<T>;
   protected _right: RBNode<T>;
