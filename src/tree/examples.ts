@@ -112,7 +112,3 @@ const rbTreeExample = (): void => {
   console.log("After deleting:\n");
   rbTree.show();
 };
-
-bTreeExample();
-avlTreeExample();
-rbTreeExample();
