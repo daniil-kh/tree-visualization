@@ -550,26 +550,49 @@ class RBTree<T> extends BTree<T> {
     node.parent.parent.color = COLORS.red;
   }
 
-  protected rotateSubtree(node: RBNode<T>): void {
+  protected rotateSubtree(node: RBNode<T>, deletion: boolean = false): void {
     if (node.parent.left?.equal(node)) {
       if (node.parent.parent.left?.equal(node.parent)) {
         this.rightRotation(node.parent.parent);
+        console.log([node.parent, node.parent.left, node.parent.right]);
+        if (!deletion) {
         node.parent.colorFlip();
         node.parent.right.colorFlip();
       } else {
+          node.parent.colorFlip();
+          node.parent.left?.colorFlip();
+          node.parent.right.color = COLORS.black;
+        }
+      } else {
         this.rightLeftRotation(node.parent.parent);
+        console.log([node, node.left, node.right]);
+        if (!deletion) {
         node.colorFlip();
         node.left.colorFlip();
+        } else {
+          node.left.color = COLORS.black;
+        }
       }
     } else {
       if (node.parent.parent.left?.equal(node.parent)) {
         this.leftRightRotation(node.parent.parent);
+        if (!deletion) {
         node.colorFlip();
         node.right.colorFlip();
       } else {
+          node.right.color = COLORS.black;
+        }
+      } else {
         this.leftRotation(node.parent.parent);
+        console.log([node.parent, node.parent.left, node.parent.right]);
+        if (!deletion) {
         node.parent.colorFlip();
         node.parent.left.colorFlip();
+        } else {
+          node.parent.colorFlip();
+          node.parent.right?.colorFlip();
+          node.parent.left.color = COLORS.black;
+        }
       }
     }
   }
