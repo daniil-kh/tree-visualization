@@ -3,7 +3,8 @@
     "preserveConstEnums": true,
     "sourceMap": false,
     "target": "ES5",
-    "lib": ["ES2015", "DOM", "ES2017"]
-  },
-  "files": ["./src/tree.ts"]
+    "lib": ["ES2015", "DOM", "ES2017"],
+    "outDir": "src/tree/build/",
+    "rootDir": "src/tree"
+  }
 }
