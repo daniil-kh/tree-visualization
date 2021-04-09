@@ -648,7 +648,120 @@ class RBTree<T> extends BTree<T> {
   }
 
   public delete(node: RBNode<T>): void {
-    this.deleteNode(node);
+    let nodeToDelete = this.find(node);
+    let nodeToExchange = this.findNodeToExchange(nodeToDelete);
+
+    this.balanceDeleteNode(nodeToDelete, nodeToExchange);
+
+    this.root.color = COLORS.black;
+  }
+
+  protected balanceDeleteNode(
+    nodeToDelete: RBNode<T>,
+    nodeToExchange: RBNode<T>
+  ): void {
+    if (nodeToExchange !== null) {
+      if (nodeToExchange.color === COLORS.red) {
+        let nodeToExchangeBuffer: RBNode<T> = nodeToExchange.clone();
+        this.deleteNode(nodeToExchange);
+        nodeToDelete.copy(nodeToExchangeBuffer);
+        return;
+      } else {
+        let nodeToExchangeBuffer: RBNode<T> = nodeToExchange.clone();
+        this.balanceDeleteNode(
+          nodeToExchange,
+          this.findNodeToExchange(nodeToExchange)
+        );
+        nodeToDelete.copy(nodeToExchangeBuffer);
+        return;
+      }
+    } else {
+      if (nodeToDelete.color === COLORS.red) {
+        this.deleteNode(nodeToDelete);
+        return;
+      } else {
+        let nodeToDeleteParent: RBNode<T> = nodeToDelete.parent;
+        this.deleteNode(nodeToDelete);
+        this.resolveDoubleBlackCase(null, nodeToDeleteParent);
+        return;
+      }
+    }
+  }
+
+  protected findNodeToExchange(node: RBNode<T>): RBNode<T> {
+    if (node.right === null && node.left === null) {
+      return null;
+    } else if (node.left !== null) {
+      return this.findMax(node.left) as RBNode<T>;
+    } else if (node.right !== null) {
+      return node.right;
+    }
+  }
+
+  protected resolveDoubleBlackCase(node: RBNode<T>, parent?: RBNode<T>): void {
+    if (node?.equal(this.root)) {
+      this.root.color = COLORS.black;
+      return;
+    }
+
+    let nodePart: RBNode<T> = null;
+
+    if (node === null) nodePart = parent;
+    else nodePart = node.parent;
+
+    const ifNodeNullComparator: Function = (_node: RBNode<T>): boolean =>
+      _node === null;
+    const ifNodeNotNullComparator: Function = (
+      _node1: RBNode<T>,
+      _node2: RBNode<T>
+    ): boolean => _node1?.equal(_node2);
+
+    const comparator: Function =
+      node === null ? ifNodeNullComparator : ifNodeNotNullComparator;
+
+    if (comparator(nodePart.left, node)) {
+      if (
+        nodePart.right !== null &&
+        (nodePart.right.right?.color === COLORS.red ||
+          nodePart.right.left?.color === COLORS.red)
+      ) {
+        if (nodePart.right.right?.color === COLORS.red) {
+          this.rotateSubtree(nodePart.right.right, true);
+        } else if (nodePart.right.left?.color === COLORS.red) {
+          this.rotateSubtree(nodePart.right.left, true);
+        }
+      } else {
+        if (nodePart.right !== null) {
+          nodePart.right.color = COLORS.red;
+        }
+        if (nodePart.color === COLORS.red) {
+          nodePart.color === COLORS.black;
+        } else {
+          this.resolveDoubleBlackCase(nodePart);
+        }
+      }
+    } else {
+      if (
+        nodePart.left !== null &&
+        (nodePart.left.right?.color === COLORS.red ||
+          nodePart.left.left?.color === COLORS.red)
+      ) {
+        if (nodePart.left.left?.color === COLORS.red) {
+          this.rotateSubtree(nodePart.left.left, true);
+        } else if (nodePart.left.right?.color === COLORS.red) {
+          this.rotateSubtree(nodePart.left.right, true);
+        }
+      } else {
+        if (nodePart.left !== null) {
+          nodePart.left.color = COLORS.red;
+        }
+        if (nodePart.color === COLORS.red) {
+          nodePart.color = COLORS.black;
+        } else {
+          this.resolveDoubleBlackCase(nodePart);
+        }
+      }
+    }
   }
 
   public find(node: INode): RBNode<T> {
