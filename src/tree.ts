@@ -774,7 +774,7 @@ class RBTree<T> extends BTree<T> {
     }
     this.showTree(node.left, height + 1);
     let output: string =
-      (node.color ? "\x1b[31m" : "\x1b[30m") +
+      (node.color === COLORS.red ? "\x1b[31m" : "\x1b[37m") +
       "-".repeat(height) +
       ">" +
       node.content() +
