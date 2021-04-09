@@ -292,10 +292,15 @@ class BTree<T> implements ITree {
     } else if (nodeToDelete.left !== null) {
       let nodeToExchange = this.findMax(nodeToDelete.left);
       nodeToDelete.copy(nodeToExchange);
+      if (nodeToDelete.left.equal(nodeToExchange)) {
+        nodeToDelete.left = nodeToExchange.left;
       if (nodeToExchange.left !== null) {
         nodeToExchange.left.parent = nodeToExchange.parent;
       }
-      nodeToExchange.parent.right = nodeToExchange.right;
+        nodeToExchange.parent = null;
+      } else {
+        nodeToExchange.parent.right = nodeToExchange.left;
+      }
     } else if (nodeToDelete.right !== null) {
         nodeToDelete.parent.right = nodeToDelete.right;
       nodeToDelete.right.parent = nodeToDelete.parent;
