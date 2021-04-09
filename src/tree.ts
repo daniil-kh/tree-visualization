@@ -852,32 +852,44 @@ const avlTreeExample = (): void => {
 const rbTreeExample = (): void => {
   const rbTree: RBTree<number> = new RBTree<number>();
   const array: Array<number> = [
-    12,
-    11,
-    6,
-    9,
-    2,
-    7,
-    13,
-    19,
-    15,
-    4,
-    18,
-    17,
-    16,
-    1,
-    10,
-    20,
-    8,
-    14,
     3,
+    19,
+    11,
+    1,
+    29,
+    18,
+    2,
+    6,
+    28,
+    10,
+    12,
+    9,
+    25,
+    26,
+    14,
+    17,
+    30,
+    21,
+    7,
     5,
+    27,
+    13,
+    4,
+    8,
+    24,
+    22,
+    16,
+    23,
+    15,
+    20,
   ];
-  //const array: Array<number> = [1, 2, 3];
   array.forEach((element: number): void => {
     rbTree.add(new RBNode<number>(element));
   });
 
+  rbTree.show();
+  rbTree.delete(new RBNode<number>(11));
+  console.log("After deleting:\n");
   rbTree.show();
 };
 
