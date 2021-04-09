@@ -493,20 +493,21 @@ class RBTree<T> extends BTree<T> {
     }
 
     this.addNode(this.root, node);
-    this.balanceTree(this.findNode(this.root, node) as RBNode<T>);
+    this.balanceTreeAfterInsertion(this.findNode(this.root, node) as RBNode<T>);
   }
-  protected balanceTree(node: RBNode<T>): void {
-    if (node?.equal(this.root)) {
+  protected balanceTreeAfterInsertion(node: RBNode<T>): void {
+    if (node.equal(this.root)) {
       return;
     }
 
     let nodeGrandparent = node.parent.parent;
-    this.balanceSubTree(node);
-    if (nodeGrandparent !== null) this.balanceTree(nodeGrandparent);
-    this.root.color = false;
+    this.balanceSubTreeAfterInsertion(node);
+    if (nodeGrandparent !== null)
+      this.balanceTreeAfterInsertion(nodeGrandparent);
+    this.root.color = COLORS.black;
   }
 
-  protected balanceSubTree(node: RBNode<T>): void {
+  protected balanceSubTreeAfterInsertion(node: RBNode<T>): void {
     if (node.equal(this.root)) {
       this.root.color = COLORS.black;
       return;
