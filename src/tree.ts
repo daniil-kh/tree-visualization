@@ -173,7 +173,7 @@ class RBNode<T> extends INode {
   }
 
   public equal(node: RBNode<T>): boolean {
-    return this._data === node._data;
+    return node !== null ? this._data === node._data : false;
   }
 
   public compare(node: RBNode<T>): number {
