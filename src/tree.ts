@@ -294,15 +294,15 @@ class BTree<T> implements ITree {
       nodeToDelete.copy(nodeToExchange);
       if (nodeToDelete.left.equal(nodeToExchange)) {
         nodeToDelete.left = nodeToExchange.left;
-      if (nodeToExchange.left !== null) {
-        nodeToExchange.left.parent = nodeToExchange.parent;
-      }
+        if (nodeToExchange.left !== null) {
+          nodeToExchange.left.parent = nodeToExchange.parent;
+        }
         nodeToExchange.parent = null;
       } else {
         nodeToExchange.parent.right = nodeToExchange.left;
       }
     } else if (nodeToDelete.right !== null) {
-        nodeToDelete.parent.right = nodeToDelete.right;
+      nodeToDelete.parent.right = nodeToDelete.right;
       nodeToDelete.right.parent = nodeToDelete.parent;
     }
   }
@@ -556,9 +556,9 @@ class RBTree<T> extends BTree<T> {
         this.rightRotation(node.parent.parent);
         console.log([node.parent, node.parent.left, node.parent.right]);
         if (!deletion) {
-        node.parent.colorFlip();
-        node.parent.right.colorFlip();
-      } else {
+          node.parent.colorFlip();
+          node.parent.right.colorFlip();
+        } else {
           node.parent.colorFlip();
           node.parent.left?.colorFlip();
           node.parent.right.color = COLORS.black;
@@ -567,8 +567,8 @@ class RBTree<T> extends BTree<T> {
         this.rightLeftRotation(node.parent.parent);
         console.log([node, node.left, node.right]);
         if (!deletion) {
-        node.colorFlip();
-        node.left.colorFlip();
+          node.colorFlip();
+          node.left.colorFlip();
         } else {
           node.left.color = COLORS.black;
         }
@@ -577,17 +577,17 @@ class RBTree<T> extends BTree<T> {
       if (node.parent.parent.left?.equal(node.parent)) {
         this.leftRightRotation(node.parent.parent);
         if (!deletion) {
-        node.colorFlip();
-        node.right.colorFlip();
-      } else {
+          node.colorFlip();
+          node.right.colorFlip();
+        } else {
           node.right.color = COLORS.black;
         }
       } else {
         this.leftRotation(node.parent.parent);
         console.log([node.parent, node.parent.left, node.parent.right]);
         if (!deletion) {
-        node.parent.colorFlip();
-        node.parent.left.colorFlip();
+          node.parent.colorFlip();
+          node.parent.left.colorFlip();
         } else {
           node.parent.colorFlip();
           node.parent.right?.colorFlip();
